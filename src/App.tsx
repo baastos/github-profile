@@ -1,8 +1,11 @@
-import { Login } from "./pages/Login";
+import { Routes } from "./routes";
+import { BrowserRouter as Router } from 'react-router-dom'
 
 function App() {
   return (
-    <Login />
+    <Router>
+      <Routes />
+    </Router>
   );
 }
 

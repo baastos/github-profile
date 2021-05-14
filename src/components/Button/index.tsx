@@ -1,14 +1,14 @@
-import { ButtonHTMLAttributes } from "react";
+import { ButtonHTMLAttributes, ReactNode } from "react";
 import { ButtonContainer } from "./styles";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-    title: string;
+    children: ReactNode;
 }
 
-export function Button({ title, ...rest }: ButtonProps): JSX.Element {
+export function Button({ title, children, ...rest }: ButtonProps): JSX.Element {
     return (
-        <ButtonContainer {...rest}>
-            {title}
+        <ButtonContainer  {...rest}>
+            {children}
         </ButtonContainer>
     )
 }
