@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useContext, useState } from "react";
+import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 
 
 type User = {
@@ -27,6 +27,14 @@ const AuthContext = createContext({} as AuthContextProps);
 export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
     const [user, setUser] = useState({} as User);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+    useEffect(() => {
+        if (user) {
+            isUserAuthenticated(true)
+        } else {
+            logoutUser();
+        }
+    }, [])
 
 
     function updateUser(user: User): void {
