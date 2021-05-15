@@ -20,8 +20,8 @@ export function Login() {
     useEffect(() => {
 
         async function getUser() {
-            const URL_PARAMS = new URLSearchParams(window.location.search)
-            const code = URL_PARAMS.get('code');
+            const urlParams = new URLSearchParams(window.location.search)
+            const code = urlParams.get('code');
 
             if (code) {
                 const body = "grant_type=authorization_code"
@@ -36,11 +36,11 @@ export function Login() {
                     }
                 })
 
-                const { access_token } = response.data;
+                const { access_token: token } = response.data;
 
                 const user = await api.get('users/@me', {
                     headers: {
-                        Authorization: `Bearer ${access_token}`
+                        Authorization: `Bearer ${token}`
                     }
                 })
 
@@ -52,7 +52,7 @@ export function Login() {
         }
         getUser();
 
-    }, [])
+    })
 
 
     return (
