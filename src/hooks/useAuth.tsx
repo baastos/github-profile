@@ -1,4 +1,5 @@
 import { createContext, ReactNode, useContext, useEffect, useState } from "react";
+import { api } from "../services/api";
 
 
 type User = {
@@ -16,41 +17,83 @@ type AuthProviderProps = {
 
 type AuthContextProps = {
     user: User;
-    updateUser: (user: User) => void;
     logoutUser: () => void;
-    isUserAuthenticated: (value: boolean) => void;
-    isAuthenticated: boolean;
+    getToken: () => Promise<void>
+    token: string;
 }
+
+const CLIENT_ID = process.env.REACT_APP_CLIENT_ID;
+const CLIENT_SECRET = process.env.REACT_APP_CLIENT_SECRET;
+const REDIRECT_URI = process.env.REACT_APP_REDIRECT_URI;
 
 const AuthContext = createContext({} as AuthContextProps);
 
 export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
     const [user, setUser] = useState({} as User);
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [token, setToken] = useState(() => {
+        const token = localStorage.getItem('@DiscordProfile.token');
+
+        if (token) {
+            return token;
+
+        } else {
+            return '';
+
+        }
+    });
 
     useEffect(() => {
-        if (user) {
-            isUserAuthenticated(true)
-        } else {
-            logoutUser();
+
+        if (token) {
+            api.get('users/@me', {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                }
+            }).then(response => {
+                const user = {
+                    ...response.data,
+                    avatar_url: `https://cdn.discordapp.com/avatars/${response.data.id}/${response.data.avatar}.png`
+                }
+                setUser(user);
+            });
         }
-    }, [])
+    }, [token])
 
 
-    function updateUser(user: User): void {
-        setUser(user);
+    async function getToken() {
 
+        const urlParams = new URLSearchParams(window.location.search)
+        const code = urlParams.get('code');
+
+        if (code) {
+            const body = "grant_type=authorization_code"
+                + `&client_id=${CLIENT_ID}`
+                + `&client_secret=${CLIENT_SECRET}`
+                + `&code=${code}`
+                + `&redirect_uri=${REDIRECT_URI}`
+
+            const response = await api.post('oauth2/token', body, {
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                }
+            })
+
+            const { access_token: token } = response.data;
+
+            setToken(token);
+
+            localStorage.setItem('@DiscordProfile.token', token);
+
+        }
     }
-    function isUserAuthenticated(value: boolean) {
-        setIsAuthenticated(value);
-    }
+
     function logoutUser(): void {
 
-        setUser({} as User);
-        isUserAuthenticated(false);
+        localStorage.removeItem('@DiscordProfile.token');
+        setToken('');
     }
     return (
-        <AuthContext.Provider value={{ user, updateUser, logoutUser, isUserAuthenticated, isAuthenticated }}>
+        <AuthContext.Provider value={{ user, logoutUser, getToken, token }}>
             {children}
         </AuthContext.Provider>
     )
