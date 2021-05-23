@@ -3,18 +3,14 @@ import { Colors } from '../../utils/Colors';
 
 
 export const ProfileContainer = styled.div`
-  height: 100vh;
-  width: 100%;
   background: ${Colors.gray};
-  
   display: flex;
   
 `;
 export const AsideContainer = styled.aside`
-  max-width: 312px;
-  height: 100vh;
+  width: 362px;
+  min-height:880px;
   background: ${Colors.grayDark};
-
   display: flex;
   flex-direction: column;
 
@@ -39,9 +35,12 @@ export const InputSearch = styled.input`
 
 
 `
-export const FriendListContainer = styled.div`
+export const RepoListContainer = styled.div`
   padding: 18px 0px;
   border-top: 2px solid ${Colors.gray};
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 
   strong{
     
@@ -50,7 +49,6 @@ export const FriendListContainer = styled.div`
   }
 
   ul{
-
     padding: 16px 22px;
     list-style: none;
 
@@ -58,31 +56,25 @@ export const FriendListContainer = styled.div`
 
       div{
         display:flex;
-        align-items: center;
-        
-          img{
-            width:32px;
-            height:32px;
-            border-radius:50%;
-
-          }
-          div{
-            display: flex;
-            flex-direction:column;
-            margin-left:12px;
+        flex-direction:column;
+          margin-left:12px;
 
             strong{
               display: flex;
               flex-direction: column;
-              font-size: 14px;
               margin-left: 0;
-              color: ${Colors.text};
+              color: ${Colors.grayLight};
+
+              a{
+                text-decoration: none;
+                color: inherit;
+                font-size: 14px;
+              }
             }
             span{
               font-size:12px;
               color: ${Colors.text};
             }
-          }
       }
       & + li{
         margin-top: 12px;
@@ -115,8 +107,8 @@ export const ProfileBox = styled.div`
       align-items: center;
 
       img{
-        width:80px;
-        height:80px;
+        width:70px;
+        height:70px;
         border-radius: 50%;
       }
       strong{
@@ -148,7 +140,7 @@ export const ProfileButton = styled.button`
         color: ${Colors.white};
         border-radius: 3px;
 
-        background: ${Colors.blue};
+        background: ${Colors.grayLight};
 
         transition: filter 0.2s;
 
@@ -186,4 +178,13 @@ export const ProfileDataItem = styled.div`
   & + &{
     margin-top:33px;
   }
+`
+export const ProfileInput = styled.input`
+height: 38px;
+background: ${Colors.gray};
+border: 0;
+outline: 0;
+color: ${Colors.white};
+padding: 0 8px;
+font-weight: 700;
 `

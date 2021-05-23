@@ -1,14 +1,17 @@
+import axios from "axios";
 import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 import { api } from "../services/api";
 
 
-type User = {
-    id: string;
-    avatar: string;
-    avatar_url: string;
+interface User {
+    id: number;
+    login: string;
+    company: string;
     email: string;
-    username: string;
-    discriminator: string;
+    location: string;
+    bio: string;
+    avatar_url: string;
+    name: string;
 }
 
 type AuthProviderProps = {
@@ -45,16 +48,13 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
     useEffect(() => {
 
         if (token) {
-            api.get('users/@me', {
+            api.get('user', {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 }
             }).then(response => {
-                const user = {
-                    ...response.data,
-                    avatar_url: `https://cdn.discordapp.com/avatars/${response.data.id}/${response.data.avatar}.png`
-                }
-                setUser(user);
+
+                setUser(response.data);
             });
         }
     }, [token])
@@ -66,16 +66,17 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
         const code = urlParams.get('code');
 
         if (code) {
-            const body = "grant_type=authorization_code"
-                + `&client_id=${CLIENT_ID}`
+            const body = `client_id=${CLIENT_ID}`
                 + `&client_secret=${CLIENT_SECRET}`
                 + `&code=${code}`
                 + `&redirect_uri=${REDIRECT_URI}`
 
-            const response = await api.post('oauth2/token', body, {
+
+            const response = await axios.post('https://github.com/login/oauth/access_token', body, {
                 headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Accept': 'application/vnd.github.v3+json',
                 }
+
             })
 
             const { access_token: token } = response.data;

@@ -3,7 +3,7 @@ import { Colors } from '../../utils/Colors';
 
 
 export const ButtonContainer = styled.button`
-    background: ${Colors.blue};
+    background: ${Colors.grayLight};
     border: 0;
     height: 38px;
     padding: 0px 52px;

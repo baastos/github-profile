@@ -8,10 +8,18 @@ interface RouteProps extends RouteDomProps {
 }
 
 export function Route({ isPrivate = false, children, ...rest }: RouteProps) {
-  const { isAuthenticated } = useAuth();
+  const { token } = useAuth();
 
   return (
-    <RouteDOM {...rest} render={({ location }) => isPrivate === isAuthenticated ? children : <Redirect to={{ pathname: isPrivate ? '/' : '/profile', state: { from: location } }} />} />
+    <RouteDOM {...rest} render={({ location }) =>
+      isPrivate === !!token
+        ?
+        children
+        :
+        <Redirect to={{
+          pathname:
+            isPrivate ? '/' : '/profile', state: { from: location }
+        }} />} />
   )
 
 }

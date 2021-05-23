@@ -14,7 +14,7 @@ export const FooterContainer = styled.footer`
         a{
 
             text-decoration: none;
-            color: ${Colors.blue};
+            color: ${Colors.grayLight};
             font-weight: 700;
             
             margin-left: 5px;

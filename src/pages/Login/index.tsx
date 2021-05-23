@@ -8,18 +8,16 @@ import { useAuth } from '../../hooks/useAuth'
 
 const CLIENT_ID = process.env.REACT_APP_CLIENT_ID;
 const REDIRECT_URI = process.env.REACT_APP_REDIRECT_URI;
-const SCOPES = 'identify'
-const authUri = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code&scope=${SCOPES}`
-
+const SCOPES = 'user%20repo';
+const state = "adsadasasd";
+const authUri = `https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&state=${state}&scope=${SCOPES}`
 
 export function Login() {
     const { getToken } = useAuth();
 
     useEffect(() => {
         getToken();
-
     })
-
     return (
         <LoginContainer>
             <img src={LogoImg} alt="logo" />
