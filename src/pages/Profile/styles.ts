@@ -8,8 +8,8 @@ export const ProfileContainer = styled.div`
   
 `;
 export const AsideContainer = styled.aside`
-  width: 362px;
-  min-height:880px;
+  width: 400px;
+  min-height:950px;
   background: ${Colors.grayDark};
   display: flex;
   flex-direction: column;
@@ -32,8 +32,6 @@ export const InputSearch = styled.input`
   border: 2px solid ${Colors.blue};
 
   }
-
-
 `
 export const RepoListContainer = styled.div`
   padding: 18px 0px;
@@ -173,8 +171,6 @@ export const ProfileDataItem = styled.div`
       text-transform: none
     }
   }
-
-
   & + &{
     margin-top:33px;
   }

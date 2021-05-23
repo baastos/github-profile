@@ -38,7 +38,6 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
 
         if (token) {
             return token;
-
         } else {
             return '';
 

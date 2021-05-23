@@ -1,6 +1,8 @@
 import { ReactNode } from 'react';
 import { RouteProps as RouteDomProps, Redirect, Route as RouteDOM } from 'react-router-dom'
-import { useAuth } from '../hooks/useAuth'
+//REDUX
+import { useSelector } from 'react-redux'
+import { StoreProps } from '../store';
 
 interface RouteProps extends RouteDomProps {
   isPrivate?: boolean;
@@ -8,7 +10,10 @@ interface RouteProps extends RouteDomProps {
 }
 
 export function Route({ isPrivate = false, children, ...rest }: RouteProps) {
-  const { token } = useAuth();
+
+
+  const token = useSelector<StoreProps, string>(state => state.token);
+
 
   return (
     <RouteDOM {...rest} render={({ location }) =>

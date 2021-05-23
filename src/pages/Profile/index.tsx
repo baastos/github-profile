@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import { Button } from "../../components/Button";
 import { Footer } from "../../components/Footer";
-import { useAuth } from "../../hooks/useAuth"
 import { api } from "../../services/api";
 import { Colors } from "../../utils/Colors";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+//REDUX
+import { useDispatch, useSelector } from 'react-redux'
+import { loadUserToState } from '../../store/modules/user/action'
+import { RemoveTokenToState } from '../../store/modules/token/action'
 
 import {
     AsideContainer,
@@ -20,6 +23,8 @@ import {
     ProfileDataItem,
     ProfileInput
 } from "./styles"
+import { StoreProps } from "../../store";
+import { User } from "../../store/modules/user/types";
 
 
 interface Repository {
@@ -36,7 +41,11 @@ interface handleChangeParam {
     [key: string]: string;
 }
 export function Profile(): JSX.Element {
-    const { logoutUser, user, token } = useAuth();
+    const user = useSelector<StoreProps, User>(state => state.user);
+    const token = useSelector<StoreProps, string>(state => state.token);
+    const dispatch = useDispatch()
+
+
     const [repositories, setRepositories] = useState<Repository[]>([]);
     const [inputSearchValue, setInputSearchValue] = useState('');
     const [nameGithub, setNameGithub] = useState(user.name);
@@ -44,6 +53,11 @@ export function Profile(): JSX.Element {
     const [companyGithub, setCompanyGithub] = useState(user.company);
     const [locationGithub, setLocationGithub] = useState(user.location);
     const [bioGithub, setBioGithub] = useState(user.bio);
+
+    useEffect(() => {
+        dispatch(loadUserToState())
+
+    }, []);
 
     useEffect(() => {
         api.get('user/repos', {
@@ -59,7 +73,6 @@ export function Profile(): JSX.Element {
 
             setRepositories(repos)
         })
-
     }, [inputSearchValue])
 
     async function handleChangeProfileData(name: string, value: string) {
@@ -108,7 +121,6 @@ export function Profile(): JSX.Element {
                 <RepoListContainer>
                     <strong>Meus repositórios</strong>
                     <ul>
-
                         {repositories.map(repo => (
                             <li key={repo.id}>
                                 <div>
@@ -168,7 +180,7 @@ export function Profile(): JSX.Element {
                     </ProfileData>
                     <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
 
-                        <Button onClick={logoutUser} style={{ background: Colors.red }}>Sair</Button>
+                        <Button onClick={() => dispatch(RemoveTokenToState())} style={{ background: Colors.red }}>Sair</Button>
                     </div>
                 </ProfileBox>
 
